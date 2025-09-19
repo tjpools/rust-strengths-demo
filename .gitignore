@@ -1,0 +1,18 @@
+# Rust
+/target/
+Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Temporary files
+*.tmp
+demo_results.txt
+
+# Assembly output
+*.s
+*.ll
