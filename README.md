@@ -156,13 +156,105 @@ This project also includes:
 - **Performance analysis**: Binary size analysis and assembly output inspection
 - **Cross-compilation examples**: Building for multiple targets
 
-## 📁 **Project Structure**
+## 📁 **Comprehensive Project File Overview**
 
-- `src/main.rs`: Main demonstration program
-- `src/educational_examples.rs`: Educational progression examples
-- `Makefile`: Development workflow automation
-- `RUST_AS_SOFTWARE_ANCHOR.md`: Deep dive into educational concepts
-- `RUST_VS_ASSEMBLY.md`: Performance and development time comparisons
-- `MAKEFILE_GUIDE.md`: Guide to using Makefiles with Rust
+### 🏗️ **Core Project Structure**
+
+#### **Root Configuration Files**
+- **`Cargo.toml`** - Main project manifest defining dependencies (rayon, serde, clap, serde_json)
+- **`Cargo.lock`** - Dependency version lock file ensuring reproducible builds
+- **`Makefile`** - Build automation with 30+ targets for development workflow
+
+#### **Core Source Code**
+- **`src/main.rs`** (338 lines) - **Main demonstration program**
+  - **Role**: Comprehensive showcase of Rust strengths
+  - **Features**: Concurrency with Arc<Mutex<T>>, parallel processing with Rayon
+  - **Demonstrates**: Memory safety, performance, zero-cost abstractions
+
+- **`src/educational_examples.rs`** - **Progressive learning modules**
+  - **Role**: Step-by-step Rust concept introduction
+  - **Features**: From basic ownership to advanced patterns
+  - **Demonstrates**: Educational progression through complexity
+
+### 📚 **Documentation Files**
+
+#### **Project Documentation**
+- **`README.md`** - **Project overview and quick start guide**
+  - **Role**: Entry point for new users
+  - **Features**: Installation, usage, performance benchmarks
+
+- **`RUST_AS_SOFTWARE_ANCHOR.md`** - **Philosophical framework**
+  - **Role**: Mathematical insights about Rust's role in software development
+  - **Features**: Galois correspondence metaphor, complexity management theory
+
+- **`RUST_VS_ASSEMBLY.md`** - **Technical comparison**
+  - **Role**: Deep dive into Rust vs low-level programming
+  - **Features**: Performance analysis, safety trade-offs
+
+- **`MAKEFILE_GUIDE.md`** - **Build system documentation**
+  - **Role**: Comprehensive Makefile tutorial
+  - **Features**: All 30+ targets explained with examples
+
+### 🛠️ **CLI Utilities (examples/ directory)**
+
+#### **File Processor** (`examples/file-processor/`)
+- **`Cargo.toml`** - Dependencies: clap, serde, csv, anyhow, regex
+- **`src/main.rs`** (300+ lines) - **Comprehensive file processing CLI**
+  - **Role**: Demonstrate I/O safety and error handling
+  - **Features**: CSV→JSON conversion, text replacement, file analysis, line filtering
+  - **Status**: ✅ Complete and tested
+
+- **`README.md`** - **File processor documentation**
+  - **Role**: Usage examples and feature overview
+  - **Features**: Command examples, Rust strengths highlighted
+
+- **Sample/Output Files**:
+  - `sample.csv`, `sample.txt` - Test input files
+  - `output.json`, `modified.txt`, `filtered.txt`, `inverted.txt`, `regex_test.txt` - Generated outputs
+
+#### **Log Analyzer** (`examples/log-analyzer/`)
+- **`Cargo.toml`** - Project manifest (placeholder)
+- **`src/main.rs`** - **Log processing utility**
+  - **Role**: Demonstrate regex patterns and data aggregation
+  - **Status**: 🔄 Structure created, needs implementation
+
+#### **Concurrent Processor** (`examples/concurrent-processor/`)
+- **`Cargo.toml`** - Project manifest (placeholder)
+- **`src/main.rs`** - **Multi-threaded processing utility**
+  - **Role**: Showcase advanced concurrency patterns
+  - **Status**: 🔄 Structure created, needs implementation
+
+#### **Examples Overview** (`examples/README.md`)
+- **Role**: Navigation guide for all CLI utilities
+- **Features**: Explains the progression of complexity across tools
+
+### 🎯 **File Roles Summary**
+
+| **Category** | **Purpose** | **Key Files** |
+|--------------|-------------|---------------|
+| **Core Demo** | Showcase Rust strengths | `src/main.rs`, `src/educational_examples.rs` |
+| **Documentation** | Explain concepts & usage | `README.md`, `RUST_AS_SOFTWARE_ANCHOR.md` |
+| **Build System** | Automate development | `Makefile`, `MAKEFILE_GUIDE.md` |
+| **CLI Tools** | Practical applications | `examples/*/src/main.rs` |
+| **Configuration** | Project setup | `Cargo.toml` files |
+
+### 🚀 **Project Progression**
+
+1. **Educational Foundation**: Main demo + educational examples
+2. **Workflow Integration**: Makefile automation + documentation
+3. **Practical Applications**: CLI utilities demonstrating real-world usage
+4. **Comprehensive Learning**: From theory to practice with full documentation
+
+Each file serves a specific role in creating a comprehensive learning resource that demonstrates Rust as a "software complexity anchor" - providing stability and confidence as projects grow in scope and sophistication.
+
+## 🔧 **CLI Utilities Examples**
+
+The `examples/` directory contains practical CLI utilities that demonstrate how the theoretical concepts translate to real-world tools:
+
+- **File Processor**: I/O handling and error management
+- **Log Analyzer**: Text processing and pattern matching  
+- **Concurrent Processor**: Practical parallel processing applications
+
+These examples bridge the gap between understanding Rust's strengths and applying them to everyday development tasks.
 
 This demonstration shows how Rust enables developers to write fast, safe, and concurrent code without the traditional tradeoffs between performance and safety, while serving as an excellent educational tool for understanding software complexity.

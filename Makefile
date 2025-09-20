@@ -48,6 +48,77 @@ test-verbose: ## Run tests with verbose output
 bench: ## Run benchmarks (if any)
 	$(CARGO) bench
 
+# Reverse Engineering and Analysis targets
+.PHONY: debug-symbols
+debug-symbols: ## Build debug version with symbols for analysis
+	$(CARGO) build --profile dev
+
+.PHONY: release-symbols
+release-symbols: ## Build release version with symbols for analysis
+	RUSTFLAGS="-C force-frame-pointers=yes -C debuginfo=2" $(CARGO) build --release
+
+.PHONY: binary-info
+binary-info: release ## Show binary information for RE analysis
+	@echo "=== Binary Information ==="
+	file $(RELEASE_DIR)/$(BINARY_NAME)
+	@echo "\n=== ELF Header ==="
+	readelf -h $(RELEASE_DIR)/$(BINARY_NAME)
+	@echo "\n=== Dynamic Symbols ==="
+	objdump -T $(RELEASE_DIR)/$(BINARY_NAME) | head -20
+
+.PHONY: assembly-dump
+assembly-dump: release ## Generate assembly dump for analysis
+	objdump -d $(RELEASE_DIR)/$(BINARY_NAME) > $(RELEASE_DIR)/$(BINARY_NAME).asm
+	@echo "Assembly dump saved to $(RELEASE_DIR)/$(BINARY_NAME).asm"
+
+.PHONY: strings-analysis
+strings-analysis: release ## Extract strings for analysis
+	strings $(RELEASE_DIR)/$(BINARY_NAME) > $(RELEASE_DIR)/$(BINARY_NAME)_strings.txt
+	@echo "Strings extracted to $(RELEASE_DIR)/$(BINARY_NAME)_strings.txt"
+
+.PHONY: ghidra-prep
+ghidra-prep: release-symbols assembly-dump strings-analysis ## Prepare files for Ghidra analysis
+	@echo "=== Files prepared for Ghidra analysis ==="
+	@echo "Binary: $(RELEASE_DIR)/$(BINARY_NAME)"
+	@echo "Assembly: $(RELEASE_DIR)/$(BINARY_NAME).asm"
+	@echo "Strings: $(RELEASE_DIR)/$(BINARY_NAME)_strings.txt"
+	@ls -la $(RELEASE_DIR)/$(BINARY_NAME)*
+
+.PHONY: compare-optimizations
+compare-optimizations: ## Compare different optimization levels
+	@echo "=== Building with different optimization levels ==="
+	RUSTFLAGS="-C opt-level=0" $(CARGO) build --release --target-dir target/opt0
+	RUSTFLAGS="-C opt-level=1" $(CARGO) build --release --target-dir target/opt1
+	RUSTFLAGS="-C opt-level=2" $(CARGO) build --release --target-dir target/opt2
+	RUSTFLAGS="-C opt-level=3" $(CARGO) build --release --target-dir target/opt3
+	RUSTFLAGS="-C opt-level=s" $(CARGO) build --release --target-dir target/opts
+	@echo "\n=== Size Comparison ==="
+	@ls -la target/opt*/release/$(BINARY_NAME) | awk '{print $$5 " " $$9}'
+
+.PHONY: memory-layout
+memory-layout: release ## Show memory layout and sections
+	@echo "=== Memory Layout Analysis ==="
+	readelf -S $(RELEASE_DIR)/$(BINARY_NAME)
+	@echo "\n=== Program Headers ==="
+	readelf -l $(RELEASE_DIR)/$(BINARY_NAME)
+
+.PHONY: dynamic-analysis-prep
+dynamic-analysis-prep: release ## Prepare for dynamic analysis
+	@echo "=== Dynamic Analysis Commands ==="
+	@echo "GDB debugging:"
+	@echo "  gdb $(RELEASE_DIR)/$(BINARY_NAME)"
+	@echo "System call tracing:"
+	@echo "  strace -c $(RELEASE_DIR)/$(BINARY_NAME)"
+	@echo "Performance profiling:"
+	@echo "  perf record $(RELEASE_DIR)/$(BINARY_NAME)"
+	@echo "Memory analysis:"
+	@echo "  valgrind --tool=memcheck $(RELEASE_DIR)/$(BINARY_NAME)"
+
+.PHONY: re-analysis
+re-analysis: ghidra-prep memory-layout dynamic-analysis-prep ## Complete reverse engineering preparation
+	@echo "\n=== Reverse Engineering Analysis Complete ==="
+	@echo "All files and information prepared for comprehensive analysis"
+
 # Code quality targets
 .PHONY: check
 check: ## Check code without building
